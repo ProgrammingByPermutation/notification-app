@@ -5,17 +5,17 @@ This application exists to allow me to create random notifications.
 ### Use Cases
 
 1. Twitch
-    1. Follow
-    1. Join Channel
-    1. Talk in Chat (beep)
-    1. Talk in Chat (TTS)
-    1. Talk in Chat (pop-up)
+    * Follow
+    * Join Channel
+    * Talk in Chat (beep)
+    * Talk in Chat (TTS)
+    * Talk in Chat (pop-up)
 1. Jenkins
-    1. Build Failures
-1. https://www.nullinside.com [^1]
-    1. Website Up
+    * Build Failures
+1. https://www.nullinside.com <sup>1</sup>
+    * Website Up
 
-[^1]: This could technically be a Jenkins builds of post-deployment tests.
+<sup>1</sup> This could technically be a Jenkins builds of post-deployment tests.
 
 ### JavaFX vs Swing
 
