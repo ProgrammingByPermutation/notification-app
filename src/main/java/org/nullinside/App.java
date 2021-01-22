@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * JavaFX App
+ * The main entrypoint of the JavaFX GUI.
  */
 public class App extends Application {
 

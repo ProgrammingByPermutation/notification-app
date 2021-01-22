@@ -10,6 +10,7 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <dependencies>
+        <!-- Boilerplate for using the JavaFX library -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -23,6 +24,7 @@
     </dependencies>
     <build>
         <plugins>
+            <!-- Boilerplate for using the JavaFX library -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -31,6 +33,7 @@
                     <release>11</release>
                 </configuration>
             </plugin>
+            <!-- Boilerplate for using the JavaFX library -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -39,6 +42,7 @@
                     <mainClass>org.nullinside.App</mainClass>
                 </configuration>
             </plugin>
+            <!-- Used to convert our application into a fat jar with the entire JRE inside it. No separate install. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -62,6 +66,7 @@
                     </transformers>
                 </configuration>
             </plugin>
+            <!-- Used to convert our fat jar into an executable for windows. -->
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
@@ -86,12 +91,12 @@
                                 <path>${project.build.directory}/image</path>
                             </jre>
                             <versionInfo>
-                                <fileVersion>1.0.0.0</fileVersion>
+                                <fileVersion>${project.version}.0</fileVersion>
                                 <txtFileVersion>${project.version}</txtFileVersion>
                                 <fileDescription>${project.name}</fileDescription>
-                                <copyright>2020 nullinside.com</copyright>
-                                <productVersion>1.0.0.0</productVersion>
-                                <txtProductVersion>1.0.0.0</txtProductVersion>
+                                <copyright>Copyright © nullinside.com 2020</copyright>
+                                <productVersion>${project.version}.0</productVersion>
+                                <txtProductVersion>${project.version}.0</txtProductVersion>
                                 <productName>${project.name}</productName>
                                 <companyName>nullinside.com</companyName>
                                 <internalName>notification-app</internalName>
