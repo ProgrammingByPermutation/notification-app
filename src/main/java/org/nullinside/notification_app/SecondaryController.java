@@ -1,4 +1,4 @@
-package org.nullinside;
+package org.nullinside.notification_app;
 
 import javafx.fxml.FXML;
 

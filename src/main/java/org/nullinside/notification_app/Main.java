@@ -1,4 +1,4 @@
-package org.nullinside;
+package org.nullinside.notification_app;
 
 /**
  * This is a hack required to compile a JavaFX application into a fat jar. The issue is that JavaFX needs
