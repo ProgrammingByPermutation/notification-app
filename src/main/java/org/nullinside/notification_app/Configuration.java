@@ -15,6 +15,7 @@ public class Configuration {
      */
     public String TWITCH_USER_OAUTH = "";
     public String TWITCH_CHANNEL = "";
+    public String TWITCH_MESSAGE_NOTIFICATION_SOUND = "";
 
     public static String getConfigurationFilename() {
         String filename = System.getProperty("user.home");

@@ -45,7 +45,7 @@ public class TwitchService {
     }
 
     public boolean connectToChat() {
-        var chat = new TwitchChatListener(this.TWITCH_USERNAME, this.TWITCH_USER_OAUTH_TOKEN, this.TWITCH_CHANNEL);
+        var chat = new TwitchChatListener(this.TWITCH_USERNAME, this.TWITCH_USER_OAUTH_TOKEN, this.TWITCH_CHANNEL, true);
         chatListener.add(chat);
         return chat.connect();
     }
