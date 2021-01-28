@@ -11,7 +11,8 @@ public class MicrosoftTTS {
     private final Thread voiceRunningThread;
 
     public MicrosoftTTS() {
-        voiceRunningThread = new Thread(this::voiceQueueingThread);
+        voiceRunningThread = new Thread(this::voiceQueueingThread, "Microsoft TTS Thread");
+        voiceRunningThread.setDaemon(true);
         voiceRunningThread.start();
     }
 
