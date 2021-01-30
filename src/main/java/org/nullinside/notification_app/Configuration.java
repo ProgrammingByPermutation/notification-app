@@ -49,4 +49,22 @@ public class Configuration {
         }
         return configuration;
     }
+
+    public boolean writeConfiguration() {
+        String filename = Configuration.getConfigurationFilename();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        File file = new File(filename);
+
+        if (file.getParentFile().exists() || file.getParentFile().mkdirs()) {
+            try {
+                objectMapper.writeValue(file, this);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
