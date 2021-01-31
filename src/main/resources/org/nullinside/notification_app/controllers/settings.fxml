@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.nullinside.notification_app.SettingsController">
+      fx:controller="org.nullinside.notification_app.controllers.SettingsController">
     <children>
         <GridPane hgap="5.0">
             <columnConstraints>
@@ -33,8 +33,13 @@
                 <PasswordField fx:id="twitchUserOAuth" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                 <TextField fx:id="twitchChannel" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
                 <TextField fx:id="twitchMessageNotificationSound" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-                <Button mnemonicParsing="false" text="Save" GridPane.columnSpan="2" GridPane.halignment="RIGHT"
-                        GridPane.rowIndex="6" onAction="#saveConfiguration"/>
+                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2"
+                      GridPane.rowIndex="6">
+                    <children>
+                        <Button mnemonicParsing="false" text="Save" onAction="#saveConfiguration" />
+                        <Button mnemonicParsing="false" text="Cancel" onAction="#cancelConfiguration" />
+                    </children>
+                </HBox>
             </children>
         </GridPane>
     </children>

@@ -1,8 +1,10 @@
-package org.nullinside.notification_app;
+package org.nullinside.notification_app.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.nullinside.notification_app.App;
+import org.nullinside.notification_app.Configuration;
 
 public class SettingsController {
     @FXML
@@ -41,5 +43,11 @@ public class SettingsController {
         configuration.TWITCH_CHANNEL = twitchChannel.getText().strip();
         configuration.TWITCH_MESSAGE_NOTIFICATION_SOUND = twitchMessageNotificationSound.getText().strip();
         configuration.writeConfiguration();
+        this.cancelConfiguration();
+    }
+
+    @FXML
+    private void cancelConfiguration() {
+        App.setRoot("controllers/app");
     }
 }
