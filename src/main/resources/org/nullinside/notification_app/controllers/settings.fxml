@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1"
       fx:controller="org.nullinside.notification_app.controllers.SettingsController">
     <children>
         <GridPane hgap="5.0">
@@ -36,8 +36,8 @@
                 <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2"
                       GridPane.rowIndex="6">
                     <children>
-                        <Button mnemonicParsing="false" text="Save" onAction="#saveConfiguration" />
-                        <Button mnemonicParsing="false" text="Cancel" onAction="#cancelConfiguration" />
+                        <Button mnemonicParsing="false" text="Save" onAction="#saveConfiguration"/>
+                        <Button mnemonicParsing="false" text="Cancel" onAction="#cancelConfiguration"/>
                     </children>
                 </HBox>
             </children>

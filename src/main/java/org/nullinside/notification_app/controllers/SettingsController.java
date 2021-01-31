@@ -7,6 +7,7 @@ import org.nullinside.notification_app.App;
 import org.nullinside.notification_app.Configuration;
 
 public class SettingsController {
+    private final Configuration configuration;
     @FXML
     private PasswordField twitchClientSecret;
     @FXML
@@ -19,7 +20,6 @@ public class SettingsController {
     private TextField twitchMessageNotificationSound;
     @FXML
     private PasswordField twitchClientId;
-    private final Configuration configuration;
 
     public SettingsController() {
         configuration = Configuration.getConfiguration();

@@ -6,6 +6,10 @@ import javafx.scene.layout.VBox;
 public interface IAlert {
     // TODO: Add interval
 
+    int getId();
+
+    void setId(int id);
+
     boolean getIsEnabled();
 
     void setIsEnabled(boolean isEnabled);

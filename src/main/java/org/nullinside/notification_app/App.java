@@ -1,12 +1,12 @@
 package org.nullinside.notification_app;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.nullinside.notification_app.alerts.IAlert;
 import org.nullinside.twitch.TwitchService;
 
 import java.io.IOException;
@@ -15,8 +15,18 @@ import java.io.IOException;
  * The main entrypoint of the JavaFX GUI.
  */
 public class App extends Application {
+    private final static AlertsManager alertsManager = new AlertsManager();
     private static Scene scene;
     private TwitchService service;
+
+    public static void addAlert(IAlert alert) {
+        alertsManager.addAlert(alert);
+
+    }
+
+    public static void removeAlert(int id) {
+        alertsManager.removeAlert(id);
+    }
 
     public static void setRoot(String fxml) {
         try {
@@ -27,7 +37,7 @@ public class App extends Application {
     }
 
     public static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        var fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
@@ -41,11 +51,6 @@ public class App extends Application {
         stage.setScene(scene);
         stage.getIcons().add(new Image(App.class.getResourceAsStream("application.png")));
         stage.show();
-
-        // Read the configuration if it exists
-        Configuration config = Configuration.getConfiguration();
-        service = new TwitchService(config.TWITCH_CLIENT_ID, config.TWITCH_CLIENT_SECRET, config.TWITCH_USERNAME, config.TWITCH_USER_OAUTH, config.TWITCH_CHANNEL);
-        service.connectToChat();
     }
 
     @Override

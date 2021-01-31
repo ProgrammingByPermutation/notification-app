@@ -9,26 +9,32 @@ import org.nullinside.twitch.TwitchService;
 
 import java.io.IOException;
 
-public class TwitchChatAlert implements IAlert {
+public class TwitchChatAlert extends AbstractAlert {
     private final String TITLE = "Twitch Chat Alerts";
-    private boolean isEnabled;
     private Scene scene;
     private TwitchService twitch;
-    private Configuration config;
+    private String clientId;
+    private String clientSecret;
+    private String username;
+    private String oauth;
     private String channel;
 
-    @Override
-    public boolean getIsEnabled() {
-        return this.isEnabled;
+    public TwitchChatAlert() {
+        var config = Configuration.getConfiguration();
+        this.clientId = config.TWITCH_CLIENT_ID;
+        this.clientSecret = config.TWITCH_CLIENT_SECRET;
+        this.username = config.TWITCH_USERNAME;
+        this.oauth = config.TWITCH_USER_OAUTH;
+        this.channel = config.TWITCH_CHANNEL;
     }
 
     @Override
     public void setIsEnabled(boolean isEnabled) {
-        if (!isEnabled && this.isEnabled && null != this.twitch) {
+        if (!isEnabled && this.getIsEnabled() && null != this.twitch) {
             this.twitch.disconnectChats();
         }
 
-        this.isEnabled = isEnabled;
+        super.setIsEnabled(isEnabled);
     }
 
     @Override
@@ -37,8 +43,7 @@ public class TwitchChatAlert implements IAlert {
             return;
         }
 
-        this.twitch = new TwitchService(config.TWITCH_CLIENT_ID, config.TWITCH_CLIENT_SECRET, config.TWITCH_USERNAME,
-                config.TWITCH_USER_OAUTH, config.TWITCH_CHANNEL);
+        this.twitch = new TwitchService(this.clientId, this.clientSecret, this.username, this.oauth, this.channel);
         this.twitch.connectToChat();
     }
 
@@ -60,8 +65,8 @@ public class TwitchChatAlert implements IAlert {
 
     @Override
     public void setPreviewGui(VBox parent) {
-        Label title = new Label(this.TITLE);
-        Label channel = new Label(this.channel);
+        var title = new Label(this.TITLE);
+        var channel = new Label(this.channel);
         parent.getChildren().addAll(title, channel);
     }
 

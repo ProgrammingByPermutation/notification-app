@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.IOException;
 
 public class Configuration {
+    // TODO: Make singleton
+    // TODO: Make subscribable
+
     public String TWITCH_CLIENT_ID = "";
     public String TWITCH_CLIENT_SECRET = "";
     public String TWITCH_USERNAME = "";
@@ -25,8 +28,8 @@ public class Configuration {
     public static Configuration getConfiguration() {
         String filename = Configuration.getConfigurationFilename();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        File file = new File(filename);
+        var objectMapper = new ObjectMapper();
+        var file = new File(filename);
 
         if (file.exists()) {
             try {
@@ -39,7 +42,7 @@ public class Configuration {
             }
         }
 
-        Configuration configuration = new Configuration();
+        var configuration = new Configuration();
         if (file.getParentFile().exists() || file.getParentFile().mkdirs()) {
             try {
                 objectMapper.writeValue(file, configuration);
@@ -53,8 +56,8 @@ public class Configuration {
     public boolean writeConfiguration() {
         String filename = Configuration.getConfigurationFilename();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        File file = new File(filename);
+        var objectMapper = new ObjectMapper();
+        var file = new File(filename);
 
         if (file.getParentFile().exists() || file.getParentFile().mkdirs()) {
             try {

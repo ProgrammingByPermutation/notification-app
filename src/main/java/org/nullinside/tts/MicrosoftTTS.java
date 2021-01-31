@@ -6,9 +6,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class MicrosoftTTS {
     private final BlockingQueue<String> voiceQueue = new LinkedBlockingQueue<>();
+    private final Thread voiceRunningThread;
     private boolean shouldExit = false;
     private Process currentSpeakingProcess = null;
-    private final Thread voiceRunningThread;
 
     public MicrosoftTTS() {
         voiceRunningThread = new Thread(this::voiceQueueingThread, "Microsoft TTS Thread");
@@ -52,7 +52,7 @@ public class MicrosoftTTS {
     }
 
     private void speak(String message) throws InterruptedException {
-        ProcessBuilder builder = new ProcessBuilder();
+        var builder = new ProcessBuilder();
         builder.command("PowerShell", "-Command", String.format("\"Add-Type -AssemblyName System.Speech; $synth = New-Object System.Speech.Synthesis.SpeechSynthesizer; $synth.Volume = 50; $synth.Speak('%s?');\"", message));
         try {
             currentSpeakingProcess = builder.start();

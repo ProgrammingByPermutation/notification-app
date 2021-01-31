@@ -23,17 +23,6 @@ public class TwitchChatListener extends ListenerAdapter {
     private PircBotX chatBot;
     private MicrosoftTTS tts;
 
-    @Override
-    public void onGenericMessage(GenericMessageEvent event) {
-        if (null != this.tts) {
-            this.tts.addMessage(String.format("%s says %s", event.getUser().getNick(), event.getMessage()));
-        } else {
-            Media sound = new Media(new File(this.notificationSound).toURI().toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(sound);
-            mediaPlayer.play();
-        }
-    }
-
     public TwitchChatListener(String username, String oauth, String channel, boolean useTTS) {
         this.username = username;
         this.oauth = oauth;
@@ -47,9 +36,20 @@ public class TwitchChatListener extends ListenerAdapter {
         }
     }
 
+    @Override
+    public void onGenericMessage(GenericMessageEvent event) {
+        if (null != this.tts) {
+            this.tts.addMessage(String.format("%s says %s", event.getUser().getNick(), event.getMessage()));
+        } else {
+            var sound = new Media(new File(this.notificationSound).toURI().toString());
+            var mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.play();
+        }
+    }
+
     public boolean connect() {
         //Configure what we want our bot to do
-        Configuration configuration = new Configuration.Builder()
+        var configuration = new Configuration.Builder()
                 .setLogin(this.username)
                 .setServerPassword(String.format("oauth:%s", this.oauth))
                 .setName(this.username)

@@ -9,4 +9,6 @@ module org.nullinside {
     opens org.nullinside.notification_app.controllers to javafx.fxml;
     opens org.nullinside.notification_app.alerts to javafx.fxml;
     exports org.nullinside.notification_app;
+    exports org.nullinside.notification_app.alerts;
+    exports org.nullinside.notification_app.controllers;
 }

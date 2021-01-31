@@ -29,7 +29,7 @@ public class TwitchService {
 
     public String getAccessToken() {
         try {
-            URL url = new URL(String.format(TWITCH_OAUTH_TOKEN_URL, this.TWITCH_CLIENT_ID, this.TWITCH_CLIENT_SECRET));
+            var url = new URL(String.format(TWITCH_OAUTH_TOKEN_URL, this.TWITCH_CLIENT_ID, this.TWITCH_CLIENT_SECRET));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
 
@@ -57,7 +57,7 @@ public class TwitchService {
     }
 
     private Map<String, String> connectionOutputToMap(HttpURLConnection conn) {
-        ObjectMapper objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper();
         TypeReference<HashMap<String, String>> typeRef = new TypeReference<>() {
         };
 
