@@ -27,4 +27,12 @@ public class AlertsManager {
         alerts.remove(alert);
         alert.dispose();
     }
+
+    public void dispose() {
+        for (var alert : this.alerts) {
+            alert.dispose();
+        }
+
+        this.alerts.clear();
+    }
 }

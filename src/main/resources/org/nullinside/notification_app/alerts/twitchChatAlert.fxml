@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx"
-            fx:controller="org.nullinside.notification_app.alerts.TwitchChatAlert"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1"
+      fx:controller="org.nullinside.notification_app.alerts.TwitchChatAlert">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <GridPane hgap="5.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="NEVER" minWidth="10.0"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        </rowConstraints>
+        <Label text="Twitch Client ID:"/>
+        <PasswordField fx:id="twitchClientId" GridPane.columnIndex="1"/>
+        <Label text="Twitch Client Secret:" GridPane.rowIndex="1"/>
+        <PasswordField fx:id="twitchClientSecret" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Label text="Twitch Username:" GridPane.rowIndex="2"/>
+        <TextField fx:id="twitchUsername" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="Twitch OAuth Token:" GridPane.rowIndex="3"/>
+        <Label text="Twitch Channel:" GridPane.rowIndex="4"/>
+        <Label text="Twitch Message Notification Sound:" GridPane.rowIndex="5"/>
+        <PasswordField fx:id="twitchUserOAuth" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <TextField fx:id="twitchChannel" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        <TextField fx:id="twitchMessageNotificationSound" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    </GridPane>
+</VBox>

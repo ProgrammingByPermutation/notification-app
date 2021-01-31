@@ -5,13 +5,9 @@
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
       fx:controller="org.nullinside.notification_app.controllers.AppController">
-    <children>
-        <HBox prefHeight="100.0" prefWidth="200.0">
-            <children>
-                <Button mnemonicParsing="false" text="Add Twitch Chat" onAction="#addTwitchChat"/>
-                <Button mnemonicParsing="false" text="Settings" onAction="#showSettings"/>
-            </children>
-        </HBox>
-        <VBox fx:id="alarmList"/>
-    </children>
+    <HBox prefHeight="100.0" prefWidth="200.0">
+        <Button mnemonicParsing="false" text="Add Twitch Chat" onAction="#addTwitchChat"/>
+        <Button mnemonicParsing="false" text="Settings" onAction="#showSettings"/>
+    </HBox>
+    <VBox fx:id="alarmList"/>
 </VBox>

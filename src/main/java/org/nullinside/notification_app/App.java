@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.nullinside.notification_app.alerts.IAlert;
-import org.nullinside.twitch.TwitchService;
 
 import java.io.IOException;
 
@@ -17,7 +16,6 @@ import java.io.IOException;
 public class App extends Application {
     private final static AlertsManager alertsManager = new AlertsManager();
     private static Scene scene;
-    private TwitchService service;
 
     public static void addAlert(IAlert alert) {
         alertsManager.addAlert(alert);
@@ -55,6 +53,6 @@ public class App extends Application {
 
     @Override
     public void stop() {
-        service.disconnectChats();
+        alertsManager.dispose();
     }
 }
