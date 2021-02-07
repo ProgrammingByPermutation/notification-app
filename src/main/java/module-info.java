@@ -5,10 +5,11 @@ module org.nullinside {
     requires pircbotx;
     requires javafx.media;
 
-    opens org.nullinside.notification_app to javafx.fxml;
     opens org.nullinside.notification_app.controllers to javafx.fxml;
     opens org.nullinside.notification_app.alerts to javafx.fxml;
     opens org.nullinside.notification_app.controls to javafx.fxml;
+    opens org.nullinside.notification_app to com.fasterxml.jackson.databind;
+
     exports org.nullinside.notification_app;
     exports org.nullinside.notification_app.alerts;
     exports org.nullinside.notification_app.controllers;

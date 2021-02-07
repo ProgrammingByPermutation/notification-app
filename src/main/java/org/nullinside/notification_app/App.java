@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.nullinside.notification_app.alerts.IAlert;
+import org.nullinside.utilities.ReflectionUtilities;
 
 import java.io.IOException;
 
@@ -43,12 +44,25 @@ public class App extends Application {
         return new Pair<>(controller, parent);
     }
 
+    public static void saveConfigurations() {
+        var manager = AlertsManager.getInstance();
+        var config = Configuration.getInstance();
+        config.savedConfigs.clear();
+
+        for (var alert : manager.getAlerts()) {
+            config.savedConfigs.add(new AlertConfiguration(alert));
+        }
+
+        config.writeConfiguration();
+    }
+
     public static void main(String[] args) {
         launch();
     }
 
     @Override
     public void start(Stage stage) throws IOException {
+        loadConfiguration();
         scene = new Scene(loadFXML(Configuration.MAIN_GUI).getValue(), 640, 480);
         stage.setScene(scene);
         stage.getIcons().add(new Image(App.class.getResourceAsStream("application.png")));
@@ -59,5 +73,19 @@ public class App extends Application {
     public void stop() {
         var manager = AlertsManager.getInstance();
         manager.dispose();
+    }
+
+    private void loadConfiguration() {
+        var manager = AlertsManager.getInstance();
+        var config = Configuration.getInstance();
+        for (var alertConfig : config.savedConfigs) {
+            IAlert alert = (IAlert) ReflectionUtilities.createInstance(alertConfig.className);
+            if (null == alert) {
+                continue;
+            }
+
+            alert.setConfig(alertConfig.config);
+            manager.addAlert(alert);
+        }
     }
 }

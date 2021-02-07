@@ -5,9 +5,9 @@ import org.nullinside.notification_app.alerts.IAlert;
 import java.util.ArrayList;
 
 public class AlertsManager {
+    private static AlertsManager instance;
     private final ArrayList<IAlert> alerts = new ArrayList<>();
     private int nextId = 0;
-    private static AlertsManager instance;
 
     private AlertsManager() {
 

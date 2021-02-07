@@ -27,7 +27,7 @@ public class SettingsController extends AbstractBaseController {
     private PasswordField twitchClientId;
 
     public SettingsController() {
-        config = Configuration.getConfiguration();
+        config = Configuration.getInstance();
     }
 
     @Override

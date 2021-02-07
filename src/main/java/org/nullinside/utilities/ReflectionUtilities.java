@@ -3,6 +3,7 @@ package org.nullinside.utilities;
 import javafx.util.Pair;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -49,8 +50,8 @@ public final class ReflectionUtilities {
      * specifically in the A class for them. You have to find all of the parent classes
      * of A one at a time and look for B's fields.
      *
-     * @param klass The class to search for the property in.
-     * @param name  The name of the property.
+     * @param klass    The class to search for the property in.
+     * @param name     The name of the property.
      * @param instance The instance of the class to search through.
      * @return The Field object associated with the name and the object it acts on, null if not found.
      */
@@ -126,8 +127,8 @@ public final class ReflectionUtilities {
      * specifically in the A class for them. You have to find all of the parent classes
      * of A one at a time and look for B's methods.
      *
-     * @param klass The class to search for the method in.
-     * @param name  The name of the method.
+     * @param klass    The class to search for the method in.
+     * @param name     The name of the method.
      * @param instance The instance of the class to search through.
      * @return The Method object associated with the name, null if not found.
      */
@@ -159,6 +160,30 @@ public final class ReflectionUtilities {
 
             klass = klass.getSuperclass();
         } while (klass != null);
+
+        return null;
+    }
+
+    /**
+     * Creates a new instance of a class using the default constructor.
+     *
+     * @param className The name of the class.
+     * @return A class instance.
+     */
+    public static Object createInstance(String className) {
+        Class<?> klass;
+        try {
+            klass = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try {
+            return klass.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
 
         return null;
     }

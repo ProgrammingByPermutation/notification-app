@@ -14,11 +14,15 @@ public interface IAlert {
 
     void setIsEnabled(boolean isEnabled);
 
-    void check();
+    String getConfig();
+
+    void setConfig(String config);
 
     Parent getGui();
 
     void setPreviewGui(VBox parent);
+
+    void check();
 
     void dispose();
 }

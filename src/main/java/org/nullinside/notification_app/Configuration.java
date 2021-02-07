@@ -6,20 +6,32 @@ import org.nullinside.notification_app.config.TwitchChatAlertConfig;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Configuration {
-    // TODO: Make singleton
-    // TODO: Make subscribable
-
     public final static String MAIN_GUI = "controllers/app";
+    private static Configuration instance;
+    public final ArrayList<AlertConfiguration> savedConfigs = new ArrayList<>();
     public TwitchChatAlertConfig twitchChatAlertGlobalConfig = new TwitchChatAlertConfig();
 
-    public static String getConfigurationFilename() {
+    private Configuration() {
+
+    }
+
+    public static Configuration getInstance() {
+        if (null == instance) {
+            instance = getConfiguration();
+        }
+
+        return instance;
+    }
+
+    private static String getConfigurationFilename() {
         String filename = System.getProperty("user.home");
         return filename + "/AppData/Roaming/nullinside/notification-app/config.json";
     }
 
-    public static Configuration getConfiguration() {
+    private static Configuration getConfiguration() {
         String filename = Configuration.getConfigurationFilename();
 
         var objectMapper = new ObjectMapper();

@@ -3,12 +3,16 @@ package org.nullinside.notification_app.controllers;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.TextInputControl;
 import javafx.util.Pair;
+import org.nullinside.notification_app.App;
+import org.nullinside.notification_app.Configuration;
 import org.nullinside.utilities.ReflectionUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractBaseController {
+    protected List<ControllerClosedListener> closedListeners = new ArrayList<>();
+
     /**
      * Maps controls to the fields they update.
      *
@@ -99,5 +103,21 @@ public abstract class AbstractBaseController {
                 return control.getText();
             }, control.textProperty()));
         }
+    }
+
+    public void addClosedListener(ControllerClosedListener listener) {
+        closedListeners.add(listener);
+    }
+
+    protected void navigateToMainUI(boolean save) {
+        if (save) {
+            updatePropertiesWithControls();
+        }
+
+        for (var listener : closedListeners) {
+            listener.onClosed(save);
+        }
+
+        App.setRoot(Configuration.MAIN_GUI);
     }
 }
