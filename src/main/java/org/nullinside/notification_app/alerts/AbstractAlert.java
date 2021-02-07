@@ -6,21 +6,21 @@ public abstract class AbstractAlert implements IAlert {
 
     @Override
     public int getId() {
-        return this.id;
+        return id;
     }
 
     @Override
     public void setId(int id) {
-        this.id = id;
+        id = id;
     }
 
     @Override
     public boolean getIsEnabled() {
-        return this.isEnabled;
+        return isEnabled;
     }
 
     @Override
     public void setIsEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
+        isEnabled = isEnabled;
     }
 }

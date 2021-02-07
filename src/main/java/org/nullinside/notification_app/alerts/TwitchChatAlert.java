@@ -1,37 +1,36 @@
 package org.nullinside.notification_app.alerts;
 
-import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.nullinside.notification_app.App;
 import org.nullinside.notification_app.Configuration;
+import org.nullinside.notification_app.controllers.TwitchChatAlertController;
 import org.nullinside.twitch.TwitchService;
 
 import java.io.IOException;
 
 public class TwitchChatAlert extends AbstractAlert {
     private final String TITLE = "Twitch Chat Alerts";
-    private Scene scene;
+    private Parent parent;
+    private TwitchChatAlertController controller;
     private TwitchService twitch;
-    private String clientId;
-    private String clientSecret;
-    private String username;
-    private String oauth;
-    private String channel;
 
     public TwitchChatAlert() {
+        controller = new TwitchChatAlertController();
         var config = Configuration.getConfiguration();
-        this.clientId = config.TWITCH_CLIENT_ID;
-        this.clientSecret = config.TWITCH_CLIENT_SECRET;
-        this.username = config.TWITCH_USERNAME;
-        this.oauth = config.TWITCH_USER_OAUTH;
-        this.channel = config.TWITCH_CHANNEL;
+        controller.config.clientId = config.twitchChatAlertGlobalConfig.clientId;
+        controller.config.clientSecret = config.twitchChatAlertGlobalConfig.clientSecret;
+        controller.config.username = config.twitchChatAlertGlobalConfig.username;
+        controller.config.oauth = config.twitchChatAlertGlobalConfig.oauth;
+        controller.config.channel = config.twitchChatAlertGlobalConfig.channel;
+        controller.config.alertSoundFilename = config.twitchChatAlertGlobalConfig.alertSoundFilename;
     }
 
     @Override
     public void setIsEnabled(boolean isEnabled) {
-        if (!isEnabled && this.getIsEnabled() && null != this.twitch) {
-            this.twitch.disconnectChats();
+        if (!isEnabled && getIsEnabled() && null != twitch) {
+            twitch.disconnectChats();
         }
 
         super.setIsEnabled(isEnabled);
@@ -39,42 +38,43 @@ public class TwitchChatAlert extends AbstractAlert {
 
     @Override
     public void check() {
-        if (null != this.twitch) {
+        if (null != twitch) {
             return;
         }
 
-        this.twitch = new TwitchService(this.clientId, this.clientSecret, this.username, this.oauth, this.channel);
-        this.twitch.connectToChat();
+        twitch = new TwitchService(controller.config.clientId, controller.config.clientSecret,
+                controller.config.username, controller.config.oauth, controller.config.channel);
+        twitch.connectToChat();
     }
 
     @Override
-    public Scene getGui() {
-        if (null != scene) {
-            return scene;
+    public Parent getGui() {
+        if (null != parent) {
+            return parent;
         }
 
         try {
-            scene = new Scene(App.loadFXML("twitchChatAlert"));
+            var pair = App.loadFXML("controllers/twitchChatAlert", controller);
+            parent = pair.getValue();
+            return parent;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
-
-        return scene;
     }
 
     @Override
     public void setPreviewGui(VBox parent) {
-        var title = new Label(this.TITLE);
-        var channel = new Label(this.channel);
+        var title = new Label(TITLE);
+        var channel = new Label(controller.config.channel);
         parent.getChildren().addAll(title, channel);
     }
 
     @Override
     public void dispose() {
-        if (null != this.twitch) {
-            this.twitch.disconnectChats();
-            this.twitch = null;
+        if (null != twitch) {
+            twitch.disconnectChats();
+            twitch = null;
         }
     }
 }

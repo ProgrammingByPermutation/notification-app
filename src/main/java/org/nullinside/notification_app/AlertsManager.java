@@ -19,7 +19,7 @@ public class AlertsManager {
     }
 
     public void removeAlert(int id) {
-        var alert = this.alerts.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
+        var alert = alerts.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
         if (null == alert) {
             return;
         }
@@ -29,10 +29,10 @@ public class AlertsManager {
     }
 
     public void dispose() {
-        for (var alert : this.alerts) {
+        for (var alert : alerts) {
             alert.dispose();
         }
 
-        this.alerts.clear();
+        alerts.clear();
     }
 }

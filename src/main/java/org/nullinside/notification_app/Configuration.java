@@ -2,6 +2,7 @@ package org.nullinside.notification_app;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.nullinside.notification_app.config.TwitchChatAlertConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,15 +11,17 @@ public class Configuration {
     // TODO: Make singleton
     // TODO: Make subscribable
 
-    public String TWITCH_CLIENT_ID = "";
-    public String TWITCH_CLIENT_SECRET = "";
-    public String TWITCH_USERNAME = "";
-    /**
-     * https://twitchapps.com/tmi/
-     */
-    public String TWITCH_USER_OAUTH = "";
-    public String TWITCH_CHANNEL = "";
-    public String TWITCH_MESSAGE_NOTIFICATION_SOUND = "";
+    public TwitchChatAlertConfig twitchChatAlertGlobalConfig = new TwitchChatAlertConfig();
+
+//    public String TWITCH_CLIENT_ID = "";
+//    public String TWITCH_CLIENT_SECRET = "";
+//    public String TWITCH_USERNAME = "";
+//    /**
+//     * https://twitchapps.com/tmi/
+//     */
+//    public String TWITCH_USER_OAUTH = "";
+//    public String TWITCH_CHANNEL = "";
+//    public String TWITCH_MESSAGE_NOTIFICATION_SOUND = "";
 
     public static String getConfigurationFilename() {
         String filename = System.getProperty("user.home");

@@ -11,4 +11,6 @@ module org.nullinside {
     exports org.nullinside.notification_app;
     exports org.nullinside.notification_app.alerts;
     exports org.nullinside.notification_app.controllers;
+    exports org.nullinside.notification_app.config;
+    exports org.nullinside.utilities;
 }

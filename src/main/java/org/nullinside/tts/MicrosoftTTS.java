@@ -19,11 +19,11 @@ public class MicrosoftTTS {
     public void dispose() throws InterruptedException {
         // First tell the other thread to exit and add a poison pill to the queue to make sure
         // that it will unblock.
-        this.shouldExit = true;
+        shouldExit = true;
         addMessage("█");
 
         // Then, kill the currently running message
-        this.stopCurrentSpeak();
+        stopCurrentSpeak();
 
         // Let the process exit gracefully.
         voiceRunningThread.join(10000);
@@ -39,13 +39,13 @@ public class MicrosoftTTS {
                 String currentMessage = voiceQueue.take();
 
                 if (shouldExit) {
-                    this.stopCurrentSpeak();
+                    stopCurrentSpeak();
                     return;
                 }
 
-                this.speak(currentMessage);
+                speak(currentMessage);
             } catch (InterruptedException e) {
-                this.stopCurrentSpeak();
+                stopCurrentSpeak();
                 return;
             }
         }

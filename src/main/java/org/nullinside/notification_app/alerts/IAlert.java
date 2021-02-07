@@ -1,6 +1,6 @@
 package org.nullinside.notification_app.alerts;
 
-import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 
 public interface IAlert {
@@ -16,7 +16,7 @@ public interface IAlert {
 
     void check();
 
-    Scene getGui();
+    Parent getGui();
 
     void setPreviewGui(VBox parent);
 

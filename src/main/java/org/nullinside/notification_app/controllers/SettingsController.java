@@ -26,24 +26,24 @@ public class SettingsController {
     }
 
     public void initialize() {
-        twitchClientId.setText(configuration.TWITCH_CLIENT_ID);
-        twitchClientSecret.setText(configuration.TWITCH_CLIENT_SECRET);
-        twitchUsername.setText(configuration.TWITCH_USERNAME);
-        twitchUserOAuth.setText(configuration.TWITCH_USER_OAUTH);
-        twitchChannel.setText(configuration.TWITCH_CHANNEL);
-        twitchMessageNotificationSound.setText(configuration.TWITCH_MESSAGE_NOTIFICATION_SOUND);
+        twitchClientId.setText(configuration.twitchChatAlertGlobalConfig.clientId);
+        twitchClientSecret.setText(configuration.twitchChatAlertGlobalConfig.clientSecret);
+        twitchUsername.setText(configuration.twitchChatAlertGlobalConfig.username);
+        twitchUserOAuth.setText(configuration.twitchChatAlertGlobalConfig.oauth);
+        twitchChannel.setText(configuration.twitchChatAlertGlobalConfig.channel);
+        twitchMessageNotificationSound.setText(configuration.twitchChatAlertGlobalConfig.alertSoundFilename);
     }
 
     @FXML
     private void saveConfiguration() {
-        configuration.TWITCH_CLIENT_ID = twitchClientId.getText().strip();
-        configuration.TWITCH_CLIENT_SECRET = twitchClientSecret.getText().strip();
-        configuration.TWITCH_USERNAME = twitchUsername.getText().strip();
-        configuration.TWITCH_USER_OAUTH = twitchUserOAuth.getText().strip();
-        configuration.TWITCH_CHANNEL = twitchChannel.getText().strip();
-        configuration.TWITCH_MESSAGE_NOTIFICATION_SOUND = twitchMessageNotificationSound.getText().strip();
+        configuration.twitchChatAlertGlobalConfig.clientId = twitchClientId.getText().strip();
+        configuration.twitchChatAlertGlobalConfig.clientSecret = twitchClientSecret.getText().strip();
+        configuration.twitchChatAlertGlobalConfig.username = twitchUsername.getText().strip();
+        configuration.twitchChatAlertGlobalConfig.oauth = twitchUserOAuth.getText().strip();
+        configuration.twitchChatAlertGlobalConfig.channel = twitchChannel.getText().strip();
+        configuration.twitchChatAlertGlobalConfig.alertSoundFilename = twitchMessageNotificationSound.getText().strip();
         configuration.writeConfiguration();
-        this.cancelConfiguration();
+        cancelConfiguration();
     }
 
     @FXML

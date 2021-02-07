@@ -29,7 +29,7 @@ public class TwitchService {
 
     public String getAccessToken() {
         try {
-            var url = new URL(String.format(TWITCH_OAUTH_TOKEN_URL, this.TWITCH_CLIENT_ID, this.TWITCH_CLIENT_SECRET));
+            var url = new URL(String.format(TWITCH_OAUTH_TOKEN_URL, TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
 
@@ -45,7 +45,7 @@ public class TwitchService {
     }
 
     public boolean connectToChat() {
-        var chat = new TwitchChatListener(this.TWITCH_USERNAME, this.TWITCH_USER_OAUTH_TOKEN, this.TWITCH_CHANNEL, true);
+        var chat = new TwitchChatListener(TWITCH_USERNAME, TWITCH_USER_OAUTH_TOKEN, TWITCH_CHANNEL, true);
         chatListener.add(chat);
         return chat.connect();
     }

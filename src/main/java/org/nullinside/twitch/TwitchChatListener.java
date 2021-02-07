@@ -29,19 +29,19 @@ public class TwitchChatListener extends ListenerAdapter {
         this.channel = channel;
 
         var config = org.nullinside.notification_app.Configuration.getConfiguration();
-        this.notificationSound = config.TWITCH_MESSAGE_NOTIFICATION_SOUND;
+        notificationSound = config.twitchChatAlertGlobalConfig.alertSoundFilename;
 
         if (useTTS) {
-            this.tts = new MicrosoftTTS();
+            tts = new MicrosoftTTS();
         }
     }
 
     @Override
     public void onGenericMessage(GenericMessageEvent event) {
-        if (null != this.tts) {
-            this.tts.addMessage(String.format("%s says %s", event.getUser().getNick(), event.getMessage()));
+        if (null != tts) {
+            tts.addMessage(String.format("%s says %s", event.getUser().getNick(), event.getMessage()));
         } else {
-            var sound = new Media(new File(this.notificationSound).toURI().toString());
+            var sound = new Media(new File(notificationSound).toURI().toString());
             var mediaPlayer = new MediaPlayer(sound);
             mediaPlayer.play();
         }
@@ -50,18 +50,18 @@ public class TwitchChatListener extends ListenerAdapter {
     public boolean connect() {
         //Configure what we want our bot to do
         var configuration = new Configuration.Builder()
-                .setLogin(this.username)
-                .setServerPassword(String.format("oauth:%s", this.oauth))
-                .setName(this.username)
-                .addServer(this.TWITCH_IRC_URL, 6697)
+                .setLogin(username)
+                .setServerPassword(String.format("oauth:%s", oauth))
+                .setName(username)
+                .addServer(TWITCH_IRC_URL, 6697)
                 .setSocketFactory(SSLSocketFactory.getDefault())
-                .addAutoJoinChannel(String.format("#%s", this.channel))
-                .addListener(new TwitchChatListener(this.username, this.oauth, this.channel, null != this.tts))
+                .addAutoJoinChannel(String.format("#%s", channel))
+                .addListener(new TwitchChatListener(username, oauth, channel, null != tts))
                 .buildConfiguration();
 
         //Create our bot with the configuration
         chatBot = new PircBotX(configuration);
-        this.chatThread = new Thread(() -> {
+        chatThread = new Thread(() -> {
             //Connect to the server
             try {
                 chatBot.startBot();
@@ -69,20 +69,20 @@ public class TwitchChatListener extends ListenerAdapter {
                 e.printStackTrace();
             }
         });
-        this.chatThread.setDaemon(true);
-        this.chatThread.start();
+        chatThread.setDaemon(true);
+        chatThread.start();
         return true;
     }
 
     public boolean disconnect() {
-        if (null != this.chatThread) {
-            this.chatBot.stopBotReconnect();
-            this.chatBot.close();
+        if (null != chatThread) {
+            chatBot.stopBotReconnect();
+            chatBot.close();
 
             try {
-                this.chatThread.join(30000);
+                chatThread.join(30000);
             } catch (InterruptedException e) {
-                this.chatThread.interrupt();
+                chatThread.interrupt();
                 e.printStackTrace();
             }
 
