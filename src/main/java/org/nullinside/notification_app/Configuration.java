@@ -13,16 +13,6 @@ public class Configuration {
 
     public TwitchChatAlertConfig twitchChatAlertGlobalConfig = new TwitchChatAlertConfig();
 
-//    public String TWITCH_CLIENT_ID = "";
-//    public String TWITCH_CLIENT_SECRET = "";
-//    public String TWITCH_USERNAME = "";
-//    /**
-//     * https://twitchapps.com/tmi/
-//     */
-//    public String TWITCH_USER_OAUTH = "";
-//    public String TWITCH_CHANNEL = "";
-//    public String TWITCH_MESSAGE_NOTIFICATION_SOUND = "";
-
     public static String getConfigurationFilename() {
         String filename = System.getProperty("user.home");
         return filename + "/AppData/Roaming/nullinside/notification-app/config.json";

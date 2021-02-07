@@ -8,6 +8,7 @@ import javafx.util.Pair;
 import org.nullinside.notification_app.config.TwitchChatAlertConfig;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TwitchChatAlertController extends AbstractBaseController {
     public PasswordField cClientId;
@@ -27,7 +28,7 @@ public class TwitchChatAlertController extends AbstractBaseController {
     }
 
     @Override
-    protected ArrayList<Pair<TextInputControl, String>> getFieldToPropertyMapping() {
+    protected List<Pair<TextInputControl, String>> getFieldToPropertyMapping() {
         return new ArrayList<>() {
             {
                 add(new Pair<>(cClientId, "config.clientId"));

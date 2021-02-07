@@ -6,6 +6,7 @@ import javafx.util.Pair;
 import org.nullinside.utilities.ReflectionUtilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractBaseController {
     /**
@@ -13,7 +14,7 @@ public abstract class AbstractBaseController {
      *
      * @return A collection of mappings of control to their property names in the class.
      */
-    protected ArrayList<Pair<TextInputControl, String>> getFieldToPropertyMapping() {
+    protected List<Pair<TextInputControl, String>> getFieldToPropertyMapping() {
         return null;
     }
 

@@ -3,11 +3,16 @@ package org.nullinside.notification_app.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
+import javafx.util.Pair;
 import org.nullinside.notification_app.App;
 import org.nullinside.notification_app.Configuration;
 
-public class SettingsController {
-    private final Configuration configuration;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SettingsController extends AbstractBaseController {
+    private final Configuration config;
     @FXML
     private PasswordField twitchClientSecret;
     @FXML
@@ -22,27 +27,32 @@ public class SettingsController {
     private PasswordField twitchClientId;
 
     public SettingsController() {
-        configuration = Configuration.getConfiguration();
+        config = Configuration.getConfiguration();
     }
 
+    @Override
+    protected List<Pair<TextInputControl, String>> getFieldToPropertyMapping() {
+        return new ArrayList<>() {
+            {
+                add(new Pair<>(twitchClientId, "config.twitchChatAlertGlobalConfig.clientId"));
+                add(new Pair<>(twitchClientSecret, "config.twitchChatAlertGlobalConfig.clientSecret"));
+                add(new Pair<>(twitchUsername, "config.twitchChatAlertGlobalConfig.username"));
+                add(new Pair<>(twitchUserOAuth, "config.twitchChatAlertGlobalConfig.oauth"));
+                add(new Pair<>(twitchChannel, "config.twitchChatAlertGlobalConfig.channel"));
+                add(new Pair<>(twitchMessageNotificationSound, "config.twitchChatAlertGlobalConfig.alertSoundFilename"));
+            }
+        };
+    }
+
+    @FXML
     public void initialize() {
-        twitchClientId.setText(configuration.twitchChatAlertGlobalConfig.clientId);
-        twitchClientSecret.setText(configuration.twitchChatAlertGlobalConfig.clientSecret);
-        twitchUsername.setText(configuration.twitchChatAlertGlobalConfig.username);
-        twitchUserOAuth.setText(configuration.twitchChatAlertGlobalConfig.oauth);
-        twitchChannel.setText(configuration.twitchChatAlertGlobalConfig.channel);
-        twitchMessageNotificationSound.setText(configuration.twitchChatAlertGlobalConfig.alertSoundFilename);
+        updateControlsWithProperties();
     }
 
     @FXML
     private void saveConfiguration() {
-        configuration.twitchChatAlertGlobalConfig.clientId = twitchClientId.getText().strip();
-        configuration.twitchChatAlertGlobalConfig.clientSecret = twitchClientSecret.getText().strip();
-        configuration.twitchChatAlertGlobalConfig.username = twitchUsername.getText().strip();
-        configuration.twitchChatAlertGlobalConfig.oauth = twitchUserOAuth.getText().strip();
-        configuration.twitchChatAlertGlobalConfig.channel = twitchChannel.getText().strip();
-        configuration.twitchChatAlertGlobalConfig.alertSoundFilename = twitchMessageNotificationSound.getText().strip();
-        configuration.writeConfiguration();
+        updatePropertiesWithControls();
+        config.writeConfiguration();
         cancelConfiguration();
     }
 
