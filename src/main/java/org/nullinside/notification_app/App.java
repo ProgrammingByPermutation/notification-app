@@ -15,17 +15,7 @@ import java.io.IOException;
  * The main entrypoint of the JavaFX GUI.
  */
 public class App extends Application {
-    private final static AlertsManager alertsManager = new AlertsManager();
     private static Scene scene;
-
-    public static void addAlert(IAlert alert) {
-        alertsManager.addAlert(alert);
-
-    }
-
-    public static void removeAlert(int id) {
-        alertsManager.removeAlert(id);
-    }
 
     public static void setRoot(String fxml) {
         try {
@@ -59,7 +49,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("controllers/app").getValue(), 640, 480);
+        scene = new Scene(loadFXML(Configuration.MAIN_GUI).getValue(), 640, 480);
         stage.setScene(scene);
         stage.getIcons().add(new Image(App.class.getResourceAsStream("application.png")));
         stage.show();
@@ -67,6 +57,7 @@ public class App extends Application {
 
     @Override
     public void stop() {
-        alertsManager.dispose();
+        var manager = AlertsManager.getInstance();
+        manager.dispose();
     }
 }

@@ -11,6 +11,7 @@ public class Configuration {
     // TODO: Make singleton
     // TODO: Make subscribable
 
+    public final static String MAIN_GUI = "controllers/app";
     public TwitchChatAlertConfig twitchChatAlertGlobalConfig = new TwitchChatAlertConfig();
 
     public static String getConfigurationFilename() {

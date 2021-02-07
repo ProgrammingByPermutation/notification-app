@@ -5,6 +5,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.util.Pair;
+import org.nullinside.notification_app.App;
+import org.nullinside.notification_app.Configuration;
 import org.nullinside.notification_app.config.TwitchChatAlertConfig;
 
 import java.util.ArrayList;
@@ -47,12 +49,13 @@ public class TwitchChatAlertController extends AbstractBaseController {
     }
 
     @FXML
-    public void test() {
-        System.out.println(config.clientId);
-        System.out.println(config.clientSecret);
-        System.out.println(config.username);
-        System.out.println(config.oauth);
-        System.out.println(config.channel);
-        System.out.println(config.alertSoundFilename);
+    private void save() {
+        updatePropertiesWithControls();
+        App.setRoot(Configuration.MAIN_GUI);
+    }
+
+    @FXML
+    private void cancel() {
+        App.setRoot(Configuration.MAIN_GUI);
     }
 }

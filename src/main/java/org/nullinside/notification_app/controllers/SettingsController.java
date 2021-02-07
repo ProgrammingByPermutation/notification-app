@@ -53,11 +53,11 @@ public class SettingsController extends AbstractBaseController {
     private void saveConfiguration() {
         updatePropertiesWithControls();
         config.writeConfiguration();
-        cancelConfiguration();
+        App.setRoot(Configuration.MAIN_GUI);
     }
 
     @FXML
     private void cancelConfiguration() {
-        App.setRoot("controllers/app");
+        App.setRoot(Configuration.MAIN_GUI);
     }
 }

@@ -7,6 +7,19 @@ import java.util.ArrayList;
 public class AlertsManager {
     private final ArrayList<IAlert> alerts = new ArrayList<>();
     private int nextId = 0;
+    private static AlertsManager instance;
+
+    private AlertsManager() {
+
+    }
+
+    public static AlertsManager getInstance() {
+        if (null == instance) {
+            instance = new AlertsManager();
+        }
+
+        return instance;
+    }
 
     public void addAlert(IAlert alert) {
         alert.setId(++nextId);
@@ -28,11 +41,16 @@ public class AlertsManager {
         alert.dispose();
     }
 
+    public IAlert[] getAlerts() {
+        return alerts.toArray(new IAlert[0]);
+    }
+
     public void dispose() {
         for (var alert : alerts) {
             alert.dispose();
         }
 
         alerts.clear();
+        instance = null;
     }
 }
