@@ -1,3 +1,10 @@
 .outlined_alerts {
     -fx-border-color: black;
+    -fx-border-style: solid none none none;
+}
+
+.remove_highlight {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-color: transparent;
 }
