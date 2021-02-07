@@ -1,6 +1,6 @@
 package org.nullinside.notification_app.alerts;
 
-import org.nullinside.notification_app.Configuration;
+import org.nullinside.notification_app.config.Configuration;
 import org.nullinside.notification_app.config.AbstractAlertConfig;
 
 public abstract class AbstractAlert implements IAlert {

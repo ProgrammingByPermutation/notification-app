@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.nullinside.notification_app.App;
-import org.nullinside.notification_app.Configuration;
+import org.nullinside.notification_app.config.Configuration;
 import org.nullinside.notification_app.config.AbstractAlertConfig;
 import org.nullinside.notification_app.config.TwitchChatAlertConfig;
 import org.nullinside.notification_app.controllers.TwitchChatAlertController;

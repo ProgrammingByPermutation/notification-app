@@ -1,4 +1,4 @@
-package org.nullinside.notification_app;
+package org.nullinside.notification_app.config;
 
 import org.nullinside.notification_app.alerts.IAlert;
 

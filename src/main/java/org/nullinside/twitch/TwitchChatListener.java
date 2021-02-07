@@ -28,7 +28,7 @@ public class TwitchChatListener extends ListenerAdapter {
         this.oauth = oauth;
         this.channel = channel;
 
-        var config = org.nullinside.notification_app.Configuration.getInstance();
+        var config = org.nullinside.notification_app.config.Configuration.getInstance();
         notificationSound = config.twitchChatAlertGlobalConfig.alertSoundFilename;
 
         if (useTTS) {

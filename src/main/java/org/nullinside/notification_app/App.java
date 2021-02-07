@@ -7,8 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import org.nullinside.notification_app.alerts.IAlert;
-import org.nullinside.utilities.ReflectionUtilities;
+import org.nullinside.notification_app.alerts.AlertsManager;
+import org.nullinside.notification_app.config.Configuration;
 
 import java.io.IOException;
 
@@ -50,7 +50,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        loadConfiguration();
+        Configuration.getInstance().initialize();
         scene = new Scene(loadFXML(Configuration.MAIN_GUI).getValue(), 640, 480);
         stage.setScene(scene);
         stage.getIcons().add(new Image(App.class.getResourceAsStream("application.png")));
@@ -61,19 +61,8 @@ public class App extends Application {
     public void stop() {
         var manager = AlertsManager.getInstance();
         manager.dispose();
-    }
 
-    private void loadConfiguration() {
-        var manager = AlertsManager.getInstance();
         var config = Configuration.getInstance();
-        for (var alertConfig : config.savedConfigs) {
-            IAlert alert = (IAlert) ReflectionUtilities.createInstance(alertConfig.className);
-            if (null == alert) {
-                continue;
-            }
-
-            alert.setConfig(alertConfig.config);
-            manager.addAlert(alert);
-        }
+        config.writeConfiguration();
     }
 }

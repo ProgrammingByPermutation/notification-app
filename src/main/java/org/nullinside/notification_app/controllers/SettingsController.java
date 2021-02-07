@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.util.Pair;
 import org.nullinside.notification_app.App;
-import org.nullinside.notification_app.Configuration;
+import org.nullinside.notification_app.config.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;

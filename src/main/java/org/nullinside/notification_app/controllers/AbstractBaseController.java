@@ -4,7 +4,7 @@ import javafx.beans.binding.Bindings;
 import javafx.scene.control.TextInputControl;
 import javafx.util.Pair;
 import org.nullinside.notification_app.App;
-import org.nullinside.notification_app.Configuration;
+import org.nullinside.notification_app.config.Configuration;
 import org.nullinside.utilities.ReflectionUtilities;
 
 import java.util.ArrayList;

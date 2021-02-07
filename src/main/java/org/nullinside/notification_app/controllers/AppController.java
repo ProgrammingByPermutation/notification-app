@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
-import org.nullinside.notification_app.AlertsManager;
+import org.nullinside.notification_app.alerts.AlertsManager;
 import org.nullinside.notification_app.App;
 import org.nullinside.notification_app.alerts.IAlert;
 import org.nullinside.notification_app.alerts.TwitchChatAlert;

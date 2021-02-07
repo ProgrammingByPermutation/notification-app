@@ -1,8 +1,10 @@
-package org.nullinside.notification_app;
+package org.nullinside.notification_app.config;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.nullinside.notification_app.config.TwitchChatAlertConfig;
+import org.nullinside.notification_app.alerts.AlertsManager;
+import org.nullinside.notification_app.alerts.IAlert;
+import org.nullinside.utilities.ReflectionUtilities;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,8 +17,26 @@ public class Configuration {
     public TwitchChatAlertConfig twitchChatAlertGlobalConfig = new TwitchChatAlertConfig();
 
     private Configuration() {
+
+    }
+
+    public void onAlertListUpdated(boolean added, IAlert alert) {
+        updateSavedConfigurations();
+    }
+
+    public void initialize() {
         var manager = AlertsManager.getInstance();
-        manager.addAlertsUpdatedListener((added, alert) -> updateSavedConfigurations());
+        manager.removeAlertsUpdatedListener(this::onAlertListUpdated);
+        for (var alertConfig : savedConfigs) {
+            IAlert alert = (IAlert) ReflectionUtilities.createInstance(alertConfig.className);
+            if (null == alert) {
+                continue;
+            }
+
+            alert.setConfig(alertConfig.config);
+            manager.addAlert(alert);
+        }
+        manager.addAlertsUpdatedListener(this::onAlertListUpdated);
     }
 
     public void updateSavedConfigurations() {
