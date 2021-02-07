@@ -14,6 +14,10 @@ public interface IAlert {
 
     void setIsEnabled(boolean isEnabled);
 
+    long getUpdateInterval();
+
+    void setUpdateInterval(long updateInterval);
+
     String getConfig();
 
     void setConfig(String config);

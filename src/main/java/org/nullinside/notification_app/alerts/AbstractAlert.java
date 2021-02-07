@@ -37,5 +37,26 @@ public abstract class AbstractAlert implements IAlert {
         Configuration.getInstance().updateSavedConfigurations();
     }
 
+    @Override
+    public long getUpdateInterval() {
+        var config = getConfigObject();
+        if (null == config) {
+            return -1;
+        }
+
+        return config.updateInterval;
+    }
+
+    @Override
+    public void setUpdateInterval(long updateInterval) {
+        var config = getConfigObject();
+        if (null == config) {
+            return;
+        }
+
+        config.updateInterval = updateInterval;
+        Configuration.getInstance().updateSavedConfigurations();
+    }
+
     protected abstract AbstractAlertConfig getConfigObject();
 }

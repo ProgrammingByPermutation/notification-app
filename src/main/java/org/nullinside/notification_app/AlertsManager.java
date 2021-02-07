@@ -3,15 +3,34 @@ package org.nullinside.notification_app;
 import org.nullinside.notification_app.alerts.IAlert;
 
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 public class AlertsManager {
     private static AlertsManager instance;
     private final ArrayList<IAlert> alerts = new ArrayList<>();
     private int nextId = 0;
     private final ArrayList<AlertListUpdatedListener> alertsChanged = new ArrayList<>();
+    private final Thread alertRunnerThread;
+    private boolean poisonPill;
+    private final Semaphore waitHandle;
 
     private AlertsManager() {
+        waitHandle = new Semaphore(0);
+        alertRunnerThread = new Thread(this::performAlertChecking);
+        alertRunnerThread.setName("Alert Manager Thread");
+        alertRunnerThread.setDaemon(true);
+        alertRunnerThread.start();
+    }
 
+    private void performAlertChecking() {
+        while(!poisonPill) {
+            try {
+                waitHandle.tryAcquire(1000, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public static AlertsManager getInstance() {
@@ -59,6 +78,18 @@ public class AlertsManager {
     }
 
     public void dispose() {
+        poisonPill = true;
+        waitHandle.release();
+        try {
+            alertRunnerThread.join(30000);
+
+            if (alertRunnerThread.isAlive()) {
+                alertRunnerThread.interrupt();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
         for (var alert : alerts) {
             alert.dispose();
         }

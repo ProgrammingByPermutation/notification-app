@@ -7,4 +7,8 @@ public class TwitchChatAlertConfig extends AbstractAlertConfig {
     public String oauth;
     public String channel;
     public String alertSoundFilename;
+
+    public TwitchChatAlertConfig() {
+        updateInterval = 30000;
+    }
 }
