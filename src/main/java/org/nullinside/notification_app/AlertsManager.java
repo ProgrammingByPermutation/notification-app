@@ -8,6 +8,7 @@ public class AlertsManager {
     private static AlertsManager instance;
     private final ArrayList<IAlert> alerts = new ArrayList<>();
     private int nextId = 0;
+    private final ArrayList<AlertListUpdatedListener> alertsChanged = new ArrayList<>();
 
     private AlertsManager() {
 
@@ -24,10 +25,19 @@ public class AlertsManager {
     public void addAlert(IAlert alert) {
         alert.setId(++nextId);
         alerts.add(alert);
+
+        for (var event : alertsChanged) {
+            event.onAlertListUpdated(true, alert);
+        }
     }
 
     public void removeAlert(IAlert alert) {
         alerts.remove(alert);
+
+        for (var event : alertsChanged) {
+            event.onAlertListUpdated(false, alert);
+        }
+
         alert.dispose();
     }
 
@@ -37,12 +47,15 @@ public class AlertsManager {
             return;
         }
 
-        alerts.remove(alert);
-        alert.dispose();
+        removeAlert(alert);
     }
 
     public IAlert[] getAlerts() {
         return alerts.toArray(new IAlert[0]);
+    }
+
+    public void addAlertsUpdatedListener(AlertListUpdatedListener listener) {
+        alertsChanged.add(listener);
     }
 
     public void dispose() {
@@ -51,6 +64,7 @@ public class AlertsManager {
         }
 
         alerts.clear();
+        alertsChanged.clear();
         instance = null;
     }
 }

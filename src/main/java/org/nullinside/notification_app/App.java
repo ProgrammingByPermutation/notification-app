@@ -44,18 +44,6 @@ public class App extends Application {
         return new Pair<>(controller, parent);
     }
 
-    public static void saveConfigurations() {
-        var manager = AlertsManager.getInstance();
-        var config = Configuration.getInstance();
-        config.savedConfigs.clear();
-
-        for (var alert : manager.getAlerts()) {
-            config.savedConfigs.add(new AlertConfiguration(alert));
-        }
-
-        config.writeConfiguration();
-    }
-
     public static void main(String[] args) {
         launch();
     }

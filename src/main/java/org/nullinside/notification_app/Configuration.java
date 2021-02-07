@@ -15,7 +15,19 @@ public class Configuration {
     public TwitchChatAlertConfig twitchChatAlertGlobalConfig = new TwitchChatAlertConfig();
 
     private Configuration() {
+        var manager = AlertsManager.getInstance();
+        manager.addAlertsUpdatedListener((added, alert) -> updateSavedConfigurations());
+    }
 
+    public void updateSavedConfigurations() {
+        var manager = AlertsManager.getInstance();
+        savedConfigs.clear();
+
+        for (var alert : manager.getAlerts()) {
+            savedConfigs.add(new AlertConfiguration(alert));
+        }
+
+        writeConfiguration();
     }
 
     public static Configuration getInstance() {

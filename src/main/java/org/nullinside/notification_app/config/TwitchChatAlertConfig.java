@@ -1,6 +1,6 @@
 package org.nullinside.notification_app.config;
 
-public class TwitchChatAlertConfig {
+public class TwitchChatAlertConfig extends AbstractAlertConfig {
     public String clientId;
     public String clientSecret;
     public String username;

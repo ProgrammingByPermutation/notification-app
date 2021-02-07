@@ -55,12 +55,9 @@ public class AppController extends AbstractBaseController {
             if (null != gui) {
                 alarmList.getChildren().remove(gui);
             }
-
-            App.saveConfigurations();
         });
 
         alarmList.getChildren().add(pair.getValue());
         alertIdToGui.put(alert.getId(), pair.getValue());
-        App.saveConfigurations();
     }
 }

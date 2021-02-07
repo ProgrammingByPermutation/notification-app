@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.nullinside.notification_app.App;
 import org.nullinside.notification_app.Configuration;
+import org.nullinside.notification_app.config.AbstractAlertConfig;
 import org.nullinside.notification_app.config.TwitchChatAlertConfig;
 import org.nullinside.notification_app.controllers.TwitchChatAlertController;
 import org.nullinside.twitch.TwitchService;
@@ -29,7 +30,7 @@ public class TwitchChatAlert extends AbstractAlert {
         controller.config.alertSoundFilename = config.twitchChatAlertGlobalConfig.alertSoundFilename;
         controller.addClosedListener(saved -> {
             if (saved) {
-                App.saveConfigurations();
+                Configuration.getInstance().updateSavedConfigurations();
             }
         });
     }
@@ -41,6 +42,11 @@ public class TwitchChatAlert extends AbstractAlert {
         }
 
         super.setIsEnabled(isEnabled);
+    }
+
+    @Override
+    protected AbstractAlertConfig getConfigObject() {
+        return controller.config;
     }
 
     @Override
