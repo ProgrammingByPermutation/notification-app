@@ -53,7 +53,8 @@ public class MicrosoftTTS {
 
     private void speak(String message) throws InterruptedException {
         var builder = new ProcessBuilder();
-        builder.command("PowerShell", "-Command", String.format("\"Add-Type -AssemblyName System.Speech; $synth = New-Object System.Speech.Synthesis.SpeechSynthesizer; $synth.Volume = 50; $synth.Speak('%s?');\"", message));
+        var command = String.format("\"Add-Type -AssemblyName System.Speech; $synth = New-Object System.Speech.Synthesis.SpeechSynthesizer; $synth.Volume = 100; $synth.Speak('%s?');\"", message.replace("'", "''"));
+        builder.command("PowerShell", "-Command", command);
         try {
             currentSpeakingProcess = builder.start();
             currentSpeakingProcess.waitFor();
