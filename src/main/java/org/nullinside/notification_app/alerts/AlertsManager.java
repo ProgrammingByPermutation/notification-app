@@ -18,6 +18,10 @@ public class AlertsManager {
      */
     private final LinkedList<AlertUpdateTracker> alerts = new LinkedList<>();
     /**
+     * The collection of alerts that were requested for removal outside of the {@link #alertRunnerThread}.
+     */
+    private final ArrayList<AlertUpdateTracker> alertsToRemove = new ArrayList<>();
+    /**
      * The list of subscriptions to invoke when changes are made to the {@link #alerts} list.
      */
     private final ArrayList<AlertListUpdatedEvent> alertsListChangedSubscribers = new ArrayList<>();
@@ -74,12 +78,26 @@ public class AlertsManager {
             // loop through the list and stop when the next update time is larger than the current time. After that,
             // the list will always be later and we don't need to worry about it.
             ArrayList<AlertUpdateTracker> alertsToUpdate = new ArrayList<>();
+            AlertUpdateTracker nextSoonestAlert = null;
             synchronized (alerts) {
+                // Get rid of any alerts the user requested we get rid of.
+                synchronized (alertsToRemove) {
+                    for (var alert : alertsToRemove) {
+                        alert.alert.dispose();
+                        alerts.remove(alert);
+                    }
+                }
+
+                // Loop through each alert and determine:
+                // 1. What we need to update now (alertsToUpdate)
+                // 2. The first thing we'll need to update on the next loop (nextSoonestAlert) so that we know
+                //    how long to wait before looping again.
                 for (int i = 0; i < alerts.size(); i++) {
                     // Check if the current alert should be updated.
                     var currentAlert = alerts.getFirst();
                     if (currentAlert.nextUpdateTime > System.currentTimeMillis()) {
                         // If it shouldn't, we're done here.
+                        nextSoonestAlert = currentAlert;
                         break;
                     }
 
@@ -102,6 +120,12 @@ public class AlertsManager {
                 for (var alert : alertsToUpdate) {
                     insertAlertSequentially(alert);
                 }
+
+                // If there wasn't something we aren't processing this round, then the first thing
+                // in the list will be the next soonest thing we need to update when we're done with this loop.
+                if (null == nextSoonestAlert && alerts.size() > 0) {
+                    nextSoonestAlert = alerts.getFirst();
+                }
             }
 
             for (var alert : alertsToUpdate) {
@@ -111,24 +135,22 @@ public class AlertsManager {
                 }
             }
 
-            try {
-                // By default, wait 1 second while we have nothing to do.
-                long wait = 1000;
-                synchronized (alerts) {
-                    if (alerts.size() > 0) {
-                        // Otherwise, the first thing in the list is the next thing we need to update so determine
-                        // how many milliseconds between now and then.
-                        wait = alerts.getFirst().nextUpdateTime - System.currentTimeMillis();
+            // By default, wait 1 second while we have nothing to do.
+            long wait = 1000;
+            if (null != nextSoonestAlert) {
+                // Otherwise, the first thing in the list is the next thing we need to update so determine
+                // how many milliseconds between now and then.
+                wait = nextSoonestAlert.nextUpdateTime - System.currentTimeMillis();
 
-                        // If something goes wrong, go with no wait. We might have a race condition where between
-                        // the above code and here we should be checking the next alert. It would be rare but it could
-                        // happen.
-                        if (wait < 0) {
-                            wait = 0;
-                        }
-                    }
+                // If something goes wrong, go with no wait. We might have a race condition where between
+                // the above code and here we should be checking the next alert. It would be rare but it could
+                // happen.
+                if (wait < 0) {
+                    wait = 0;
                 }
+            }
 
+            try {
                 // Use the wait handle to wait for the time to expire. If we need to check sooner or get poisoned
                 // out of this loop the outside world can use the wait handle to force a loop.
                 waitHandle.tryAcquire(wait, TimeUnit.MILLISECONDS);
@@ -151,6 +173,10 @@ public class AlertsManager {
             alerts.clear();
         }
 
+        synchronized (alertsToRemove) {
+            alertsToRemove.clear();
+        }
+
         // Clear out the subscribers.
         synchronized (alertsListChangedSubscribers) {
             alertsListChangedSubscribers.clear();
@@ -171,9 +197,30 @@ public class AlertsManager {
         // Set and increment the id.
         alert.setId(++nextId);
 
-        // Add the alert to the beginning of the list so that it gets call for the first time.
+        // Add the alert to the beginning of the list so that it gets called for the first time.
         synchronized (alerts) {
             alerts.addFirst(new AlertUpdateTracker(alert, System.currentTimeMillis()));
+            alert.addEnabledChangedListener((enabled, updatedAlert) -> {
+                if (!enabled) {
+                    return;
+                }
+
+                synchronized (alerts) {
+                    // Find the alert in our collection, we need to put it at the front of the list.
+                    var alertWrapper = alerts.stream().filter(a -> a.alert == alert)
+                            .findFirst()
+                            .orElse(null);
+
+                    if (null == alertWrapper) {
+                        return;
+                    }
+
+                    // If we found it, do the update.
+                    alertWrapper.nextUpdateTime = System.currentTimeMillis();
+                    alerts.remove(alertWrapper);
+                    alerts.addFirst(alertWrapper);
+                }
+            });
         }
 
         // Tell the alert update thread to stop waiting and poll.
@@ -248,13 +295,18 @@ public class AlertsManager {
     /**
      * Removes an alert from the manager. It will be disposed of automatically.
      *
-     * @param alert the alert
+     * @param alert The alert to remove.
      */
     private void removeAlert(AlertUpdateTracker alert) {
-        synchronized (alerts) {
-            alerts.remove(alert);
+        // Tell the other thread we want to remove something.
+        synchronized (alertsToRemove) {
+            alertsToRemove.add(alert);
         }
 
+        // Signal to the thread in case it's on a long wait.
+        waitHandle.release();
+
+        // Tell the subscribers about the removal.
         ArrayList<AlertListUpdatedEvent> subs;
         synchronized (alertsListChangedSubscribers) {
             subs = new ArrayList<>(alertsListChangedSubscribers);
@@ -263,8 +315,6 @@ public class AlertsManager {
         for (var event : subs) {
             event.onAlertListUpdated(false, alert.alert);
         }
-
-        alert.alert.dispose();
     }
 
     /**
@@ -274,7 +324,13 @@ public class AlertsManager {
      */
     public IAlert[] getAlerts() {
         synchronized (alerts) {
-            return alerts.stream().map(alert -> alert.alert).toArray(IAlert[]::new);
+            // There may be alerts that haven't been removed yet but will be soon. We won't want to
+            // return those since they shouldn't exist.
+            synchronized (alertsToRemove) {
+                return alerts.stream().filter(alert -> !alertsToRemove.contains(alert))
+                        .map(alert -> alert.alert)
+                        .toArray(IAlert[]::new);
+            }
         }
     }
 

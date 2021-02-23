@@ -90,7 +90,7 @@ public class MicrosoftTTS {
      *
      * @param message The message to speak.
      */
-    private void speak(String message){
+    private void speak(String message) {
         var builder = new ProcessBuilder();
         var command = String.format("\"Add-Type -AssemblyName System.Speech; $synth = New-Object System.Speech.Synthesis.SpeechSynthesizer; $synth.Volume = 100; $synth.Speak('%s?');\"", message.replace("'", "''"));
         builder.command("PowerShell", "-Command", command);
