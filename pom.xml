@@ -58,6 +58,16 @@
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M4</version>
+                <configuration>
+                    <argLine>--add-opens
+                        org.nullinside/org.nullinside.notification_app.alerts=ALL-UNNAMED
+                    </argLine>
+                </configuration>
+            </plugin>
+
             <!-- Boilerplate for using the JavaFX library -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
