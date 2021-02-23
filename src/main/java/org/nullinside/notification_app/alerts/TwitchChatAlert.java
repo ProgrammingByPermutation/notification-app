@@ -6,52 +6,82 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.nullinside.notification_app.App;
-import org.nullinside.notification_app.config.Configuration;
 import org.nullinside.notification_app.config.AbstractAlertConfig;
+import org.nullinside.notification_app.config.GlobalConfig;
 import org.nullinside.notification_app.config.TwitchChatAlertConfig;
 import org.nullinside.notification_app.controllers.TwitchChatAlertController;
 import org.nullinside.twitch.TwitchService;
 
 import java.io.IOException;
 
+/**
+ * An alert that monitors twitch chat. It notifies the user when someone types in chat.
+ */
 public class TwitchChatAlert extends AbstractAlert {
+    /**
+     * The title to display in the preview panel of the UI.
+     */
     private final String TITLE = "Twitch Chat Alerts";
-    private TwitchChatAlertController controller;
+    /**
+     * The GUI's controller that handles updating the configuration of the alert.
+     */
+    private final TwitchChatAlertController controller;
+    /**
+     * The twitch service responsible for interacting with the twitch website and it's APIs.
+     */
     private TwitchService twitch;
 
+    /**
+     * Instantiates a new instance of the class.
+     */
     public TwitchChatAlert() {
         controller = new TwitchChatAlertController();
-        var config = Configuration.getInstance();
-        controller.config.clientId = config.twitchChatAlertGlobalConfig.clientId;
-        controller.config.clientSecret = config.twitchChatAlertGlobalConfig.clientSecret;
-        controller.config.username = config.twitchChatAlertGlobalConfig.username;
-        controller.config.oauth = config.twitchChatAlertGlobalConfig.oauth;
-        controller.config.channel = config.twitchChatAlertGlobalConfig.channel;
-        controller.config.alertSoundFilename = config.twitchChatAlertGlobalConfig.alertSoundFilename;
+
+        // Get the global configuration settings and store them in our object.
+        var config = GlobalConfig.getInstance();
+
+        controller.config = null != config.twitchChatAlertGlobalConfig ? config.twitchChatAlertGlobalConfig.clone() :
+                new TwitchChatAlertConfig();
+
         controller.addClosedListener(saved -> {
             if (saved) {
-                Configuration.getInstance().updateSavedConfigurations();
+                GlobalConfig.getInstance().updateSavedConfigurations();
             }
         });
     }
 
+    /**
+     * Sets a flag indicating whether the alert is enabled.
+     *
+     * @param isEnabled True if enabled, false otherwise.
+     */
     @Override
     public void setIsEnabled(boolean isEnabled) {
-        if (!isEnabled && getIsEnabled() && null != twitch) {
+        if (!isEnabled && null != twitch) {
             twitch.disconnectChats();
+            twitch = null;
         }
 
         super.setIsEnabled(isEnabled);
     }
 
+    /**
+     * Gets the alert configuration.
+     *
+     * @return The alert configuration object.
+     */
     @Override
     protected AbstractAlertConfig getConfigObject() {
         return controller.config;
     }
 
+    /**
+     * Executes the logic of alert. This includes identifying if an alert condition
+     * exists and providing some kind of indication to the user that it happened.
+     */
     @Override
     public void check() {
-        if (null != twitch) {
+        if (getIsEnabled() && null != twitch) {
             return;
         }
 
@@ -60,6 +90,11 @@ public class TwitchChatAlert extends AbstractAlert {
         twitch.connectToChat();
     }
 
+    /**
+     * Gets the window GUI to display when configuring the alert.
+     *
+     * @return The window GUI to display when configuring the alert.
+     */
     @Override
     public Parent getGui() {
         try {
@@ -71,13 +106,27 @@ public class TwitchChatAlert extends AbstractAlert {
         }
     }
 
+    /**
+     * Sets the preview GUI to display in the list of all alerts.
+     * <p>
+     * The parent row that houses a preview of this Alert's configuration is
+     * passed in and the alert is given an opportunity to add any UI elements
+     * it would like.
+     *
+     * @param parent The parent that houses the alert in the alert list.
+     */
     @Override
-    public void setPreviewGui(VBox parent) {
+    public void setPreviewRow(VBox parent) {
         var title = new Label(TITLE);
         var channel = new Label(controller.config.channel);
         parent.getChildren().addAll(title, channel);
     }
 
+    /**
+     * Gets the alert configuration in JSON string format.
+     *
+     * @return The alert configuration in JSON string format.
+     */
     @Override
     public String getConfig() {
         var objectMapper = new ObjectMapper();
@@ -89,6 +138,11 @@ public class TwitchChatAlert extends AbstractAlert {
         }
     }
 
+    /**
+     * Sets the alert configuration in JSON string format.
+     *
+     * @param config The alert configuration in JSON string format.
+     */
     @Override
     public void setConfig(String config) {
         var objectMapper = new ObjectMapper();
@@ -99,6 +153,9 @@ public class TwitchChatAlert extends AbstractAlert {
         }
     }
 
+    /**
+     * Dispose of managed and unmanaged resources used by the alert.
+     */
     @Override
     public void dispose() {
         if (null != twitch) {

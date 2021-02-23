@@ -168,9 +168,18 @@ public final class ReflectionUtilities {
      * Creates a new instance of a class using the default constructor.
      *
      * @param className The name of the class.
+     * @param argTypes  The types to pass to the constructor.
+     * @param initargs  The arguments to pass to the constructor.
      * @return A class instance.
      */
-    public static Object createInstance(String className) {
+    public static Object createInstance(String className, Class<?>[] argTypes, Object[] initargs) {
+        if ((null == argTypes && null != initargs) || (null != argTypes && null == initargs) ||
+                (null != argTypes && null != initargs && argTypes.length != initargs.length)) {
+            System.err.printf("%s: Incompatible argument types and argument list.\n",
+                    ReflectionUtilities.class.getName());
+            return null;
+        }
+
         Class<?> klass;
         try {
             klass = Class.forName(className);
@@ -180,7 +189,7 @@ public final class ReflectionUtilities {
         }
 
         try {
-            return klass.getDeclaredConstructor().newInstance();
+            return klass.getDeclaredConstructor(argTypes).newInstance(initargs);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
