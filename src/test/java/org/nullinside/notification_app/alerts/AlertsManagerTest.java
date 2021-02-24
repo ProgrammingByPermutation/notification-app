@@ -59,7 +59,7 @@ class AlertsManagerTest {
         var noop = new NoopAlert();
         var noop2 = new NoopAlert();
         var noop3 = new NoopAlert();
-        final boolean[] noopVarRemoved = {false, false,false};
+        final boolean[] noopVarRemoved = {false, false, false};
 
         var manager = AlertsManager.getInstance();
         manager.addAlertsUpdatedListener((added, alert) -> {

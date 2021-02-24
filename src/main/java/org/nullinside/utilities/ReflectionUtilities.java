@@ -97,15 +97,16 @@ public final class ReflectionUtilities {
      * specifically in the A class for them. You have to find all of the parent classes
      * of A one at a time and look for B's methods.
      *
-     * @param klass The class to search for the method in.
-     * @param name  The name of the method.
+     * @param klass      The class to search for the method in.
+     * @param name       The name of the method.
+     * @param paramTypes The types of the parameters of the method you're looking for.
      * @return The Method object associated with the name, null if not found.
      */
-    public static Method getMethod(Class<?> klass, String name) {
+    public static Method getMethod(Class<?> klass, String name, Class<?>... paramTypes) {
         Method method;
         do {
             try {
-                method = klass.getMethod(name);
+                method = klass.getMethod(name, paramTypes);
                 return method;
             } catch (NoSuchMethodException e) {
                 // Do nothing
@@ -127,12 +128,13 @@ public final class ReflectionUtilities {
      * specifically in the A class for them. You have to find all of the parent classes
      * of A one at a time and look for B's methods.
      *
-     * @param klass    The class to search for the method in.
-     * @param name     The name of the method.
-     * @param instance The instance of the class to search through.
+     * @param klass      The class to search for the method in.
+     * @param name       The name of the method.
+     * @param instance   The instance of the class to search through.
+     * @param paramTypes The types of the parameters of the method you're looking for.
      * @return The Method object associated with the name, null if not found.
      */
-    public static Pair<Object, Method> getMethodNested(Class<?> klass, String name, Object instance) {
+    public static Pair<Object, Method> getMethodNested(Class<?> klass, String name, Object instance, Class<?>... paramTypes) {
         var searchFor = name;
         String next = null;
         if (name.contains(".")) {
@@ -150,7 +152,7 @@ public final class ReflectionUtilities {
                     return getMethodNested(field.getType(), next, field.get(instance));
                 }
 
-                return new Pair<>(instance, klass.getMethod(searchFor));
+                return new Pair<>(instance, klass.getMethod(searchFor, paramTypes));
             } catch (NoSuchFieldException | NoSuchMethodException e) {
                 // Do nothing
             } catch (IllegalAccessException e) {

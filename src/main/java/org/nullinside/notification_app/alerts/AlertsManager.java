@@ -220,6 +220,9 @@ public class AlertsManager {
                     alerts.remove(alertWrapper);
                     alerts.addFirst(alertWrapper);
                 }
+
+                // Tell the alert update thread to stop waiting and poll.
+                waitHandle.release();
             });
         }
 

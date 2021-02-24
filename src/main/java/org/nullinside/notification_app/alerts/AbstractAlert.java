@@ -51,7 +51,7 @@ public abstract class AbstractAlert implements IAlert {
         }
 
         // Get it, it's atomic.
-        return config.isEnabled;
+        return config.getIsEnabled();
     }
 
     /**
@@ -67,17 +67,26 @@ public abstract class AbstractAlert implements IAlert {
         }
 
         // If there are no changes, do nothing.
-        if (config.isEnabled == isEnabled) {
+        if (config.getIsEnabled() == isEnabled) {
             return;
         }
 
         // Set it, it's atomic.
-        config.isEnabled = isEnabled;
+        config.setIsEnabled(isEnabled);
 
         // When we update the enabled state we need to update the written configuration file.
         GlobalConfig.getInstance().updateSavedConfigurations();
 
         // Update the subscribers with changes to the enabled state.
+        invokeEnabledChanged(isEnabled);
+    }
+
+    /**
+     * Invokes the enabled changed subscribers.
+     *
+     * @param isEnabled True if the alert is enabled, false otherwise.
+     */
+    private void invokeEnabledChanged(boolean isEnabled) {
         ArrayList<AlertEnableUpdateEvent> subs;
         synchronized (alertEnabledSubscribers) {
             subs = new ArrayList<>(alertEnabledSubscribers);
@@ -100,8 +109,18 @@ public abstract class AbstractAlert implements IAlert {
      */
     @Override
     public void addEnabledChangedListener(AlertEnableUpdateEvent sub) {
+        boolean subToConfig;
         synchronized (alertEnabledSubscribers) {
+            subToConfig = alertEnabledSubscribers.size() == 0;
             alertEnabledSubscribers.add(sub);
+        }
+
+        // If someone subscribes to us, they want to know about updates to the underlying config.
+        if (subToConfig) {
+            var config = getConfigObject();
+            config.addEnabledSubscribers((enabled, configObj) -> {
+                invokeEnabledChanged(enabled);
+            });
         }
     }
 

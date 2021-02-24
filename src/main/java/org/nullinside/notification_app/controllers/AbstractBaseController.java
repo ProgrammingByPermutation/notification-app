@@ -3,6 +3,7 @@ package org.nullinside.notification_app.controllers;
 import javafx.scene.control.TextInputControl;
 import javafx.util.Pair;
 import org.nullinside.notification_app.App;
+import org.nullinside.notification_app.config.AbstractAlertConfig;
 import org.nullinside.notification_app.config.GlobalConfig;
 import org.nullinside.utilities.ReflectionUtilities;
 
@@ -120,6 +121,16 @@ public abstract class AbstractBaseController {
         if (null == newConfig) {
             System.err.printf("%s: Failed to get clone: %s", getClass().getName(), configObject.getClass().getName());
             return;
+        }
+
+        // Copy the getters to the settings of the new object.
+        if (configObject instanceof AbstractAlertConfig) {
+            AbstractAlertConfig newConfigObj = (AbstractAlertConfig) newConfig;
+            AbstractAlertConfig oldConfigObj = (AbstractAlertConfig) configObject;
+
+            newConfigObj.setIsEnabled(oldConfigObj.getIsEnabled());
+            newConfigObj.setUpdateInterval(oldConfigObj.getUpdateInterval());
+            newConfigObj.addEnabledSubscribers(oldConfigObj.getEnabledSubscribers());
         }
 
         // Swap the existing configuration with the new instance we constructed.

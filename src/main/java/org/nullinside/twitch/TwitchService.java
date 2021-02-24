@@ -39,6 +39,10 @@ public class TwitchService {
      */
     public final String TWITCH_CHANNEL;
     /**
+     * The path to the alert sound to play when someone types in chat.
+     */
+    public final String TWITCH_NOTIFICATION_SOUND;
+    /**
      * The Twitch chat listener objects.
      */
     private final ArrayList<TwitchChatListener> chatListener = new ArrayList<>();
@@ -46,18 +50,20 @@ public class TwitchService {
     /**
      * Instantiates a new instance of the class.
      *
-     * @param clientId       The client id from the Twitch API.
-     * @param clientSecret   The client secret from the Twitch API.
-     * @param username       The username of user we'll log in as.
-     * @param userOAuthToken The OAuth token of the user we'll log in as. (https://twitchapps.com/tmi)
-     * @param channel        The channel to monitor.
+     * @param clientId          The client id from the Twitch API.
+     * @param clientSecret      The client secret from the Twitch API.
+     * @param username          The username of user we'll log in as.
+     * @param userOAuthToken    The OAuth token of the user we'll log in as. (https://twitchapps.com/tmi)
+     * @param channel           The channel to monitor.
+     * @param notificationSound The path to the alert sound to play when someone types in chat.
      */
-    public TwitchService(String clientId, String clientSecret, String username, String userOAuthToken, String channel) {
+    public TwitchService(String clientId, String clientSecret, String username, String userOAuthToken, String channel, String notificationSound) {
         TWITCH_CLIENT_ID = clientId;
         TWITCH_CLIENT_SECRET = clientSecret;
         TWITCH_USERNAME = username;
         TWITCH_USER_OAUTH_TOKEN = userOAuthToken;
         TWITCH_CHANNEL = channel;
+        TWITCH_NOTIFICATION_SOUND = notificationSound;
     }
 
     /**
@@ -88,7 +94,7 @@ public class TwitchService {
      * @return True if successful, false otherwise.
      */
     public boolean connectToChat() {
-        var chat = new TwitchChatListener(TWITCH_USERNAME, TWITCH_USER_OAUTH_TOKEN, TWITCH_CHANNEL, true);
+        var chat = new TwitchChatListener(TWITCH_USERNAME, TWITCH_USER_OAUTH_TOKEN, TWITCH_CHANNEL, TWITCH_NOTIFICATION_SOUND, true);
         chatListener.add(chat);
         return chat.connect();
     }

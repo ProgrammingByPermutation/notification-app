@@ -86,7 +86,8 @@ public class TwitchChatAlert extends AbstractAlert {
         }
 
         twitch = new TwitchService(controller.config.clientId, controller.config.clientSecret,
-                controller.config.username, controller.config.oauth, controller.config.channel);
+                controller.config.username, controller.config.oauth, controller.config.channel,
+                controller.config.alertSoundFilename);
         twitch.connectToChat();
     }
 

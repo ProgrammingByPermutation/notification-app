@@ -5,6 +5,10 @@ package org.nullinside.notification_app.config;
  */
 public class TwitchChatAlertConfig extends AbstractAlertConfig {
     /**
+     * The default update interval for the alert.
+     */
+    private static final long DEFAULT_UPDATE_INTERVAL = 30000;
+    /**
      * The client id from the Twitch API.
      */
     public final String clientId;
@@ -33,6 +37,7 @@ public class TwitchChatAlertConfig extends AbstractAlertConfig {
      * Instantiates a new instance of the class.
      */
     public TwitchChatAlertConfig() {
+        setUpdateInterval(DEFAULT_UPDATE_INTERVAL);
         clientId = null;
         clientSecret = null;
         username = null;
@@ -51,9 +56,9 @@ public class TwitchChatAlertConfig extends AbstractAlertConfig {
      * @param channel            The channel to monitor.
      * @param alertSoundFilename The path to the alert sound to play when someone types in chat.
      */
-    public TwitchChatAlertConfig(String clientId, String clientSecret, String username, String oauth,
-                                 String channel, String alertSoundFilename) {
-        this.setUpdateInterval(30000);
+    public TwitchChatAlertConfig(String clientId, String clientSecret, String username,
+                                 String oauth, String channel, String alertSoundFilename) {
+        setUpdateInterval(DEFAULT_UPDATE_INTERVAL);
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.username = username;

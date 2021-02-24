@@ -58,16 +58,17 @@
     </dependencies>
     <build>
         <plugins>
+            <!-- Plugin for running JUnit 5 tests -->
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M4</version>
                 <configuration>
+                    <!-- We have to add everything we test in <module>/package format because Java is awful -->
                     <argLine>--add-opens
                         org.nullinside/org.nullinside.notification_app.alerts=ALL-UNNAMED
                     </argLine>
                 </configuration>
             </plugin>
-
             <!-- Boilerplate for using the JavaFX library -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

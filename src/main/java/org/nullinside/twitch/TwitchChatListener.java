@@ -57,16 +57,17 @@ public class TwitchChatListener extends ListenerAdapter {
     /**
      * Instantiates a new instance of the class.
      *
-     * @param username The Twitch username.
-     * @param oauth    The OAuth token for authenticating as the Twitch user.
-     * @param channel  The Twitch channel to monitor.
-     * @param useTTS   True if all messages are going through TTS, false otherwise.
+     * @param username          The Twitch username.
+     * @param oauth             The OAuth token for authenticating as the Twitch user.
+     * @param channel           The Twitch channel to monitor.
+     * @param notificationSound The file path to the notification sound to play.
+     * @param useTTS            True if all messages are going through TTS, false otherwise.
      */
-    public TwitchChatListener(String username, String oauth, String channel, boolean useTTS) {
+    public TwitchChatListener(String username, String oauth, String channel, String notificationSound, boolean useTTS) {
         this.username = username;
         this.oauth = oauth;
         this.channel = channel;
-        this.notificationSound = null;
+        this.notificationSound = notificationSound;
         this.useTTS = useTTS;
     }
 
@@ -81,9 +82,14 @@ public class TwitchChatListener extends ListenerAdapter {
             var sound = new Media(new File(notificationSound).toURI().toString());
             var mediaPlayer = new MediaPlayer(sound);
             mediaPlayer.play();
-        }
+            mediaPlayer.setOnEndOfMedia(() -> {
+                if (null != tts) {
+                    tts.addMessage(String.format("%s says %s", event.getUser().getNick(), event.getMessage()));
+                }
 
-        if (null != tts) {
+                mediaPlayer.dispose();
+            });
+        } else if (null != tts) {
             tts.addMessage(String.format("%s says %s", event.getUser().getNick(), event.getMessage()));
         }
     }
