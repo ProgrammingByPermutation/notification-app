@@ -71,6 +71,7 @@ public class MicrosoftTTS {
         while (true) {
             try {
                 String currentMessage = voiceQueue.take();
+                System.out.printf("Got: %s\n", currentMessage);
 
                 if (shouldExit) {
                     stopCurrentSpeak();
@@ -93,11 +94,13 @@ public class MicrosoftTTS {
     private void speak(String message) {
         var builder = new ProcessBuilder();
         var command = String.format("\"Add-Type -AssemblyName System.Speech; $synth = New-Object System.Speech.Synthesis.SpeechSynthesizer; $synth.Volume = 100; $synth.Speak('%s?');\"", message.replace("'", "''"));
+        System.out.printf("Command: %s\n", command);
         builder.command("PowerShell", "-Command", command);
 
         try {
             currentSpeakingProcess = builder.start();
             currentSpeakingProcess.waitFor();
+            System.out.printf("Exit Code: %d\n", currentSpeakingProcess.exitValue());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

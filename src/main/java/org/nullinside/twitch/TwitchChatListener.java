@@ -78,18 +78,24 @@ public class TwitchChatListener extends ListenerAdapter {
      */
     @Override
     public void onGenericMessage(GenericMessageEvent event) {
-        if (null != notificationSound) {
+        if (null != notificationSound && !notificationSound.isEmpty()) {
             var sound = new Media(new File(notificationSound).toURI().toString());
             var mediaPlayer = new MediaPlayer(sound);
+            System.out.println("Playing notification sound");
             mediaPlayer.play();
-            mediaPlayer.setOnEndOfMedia(() -> {
-                if (null != tts) {
-                    tts.addMessage(String.format("%s says %s", event.getUser().getNick(), event.getMessage()));
-                }
+            //            mediaPlayer.setOnEndOfMedia(() -> {
+            //                System.out.println("Playing notification sound (done)");
+            //                if (null != tts) {
+            //                    System.out.printf("Adding: %s says %s\n", event.getUser().getNick(), event.getMessage());
+            //                    tts.addMessage(String.format("%s says %s", event.getUser().getNick(), event.getMessage()));
+            //                }
+            //
+            //                mediaPlayer.dispose();
+            //            });
+        }
 
-                mediaPlayer.dispose();
-            });
-        } else if (null != tts) {
+        if (null != tts) {
+            System.out.printf("Adding: %s says %s\n", event.getUser().getNick(), event.getMessage());
             tts.addMessage(String.format("%s says %s", event.getUser().getNick(), event.getMessage()));
         }
     }
